@@ -20,14 +20,17 @@ export async function action({request, params}) {
         date: data.get('date'),
         description: data.get('description')
     } 
-debugger
+
     const response = await fetch('http://localhost:8080/events', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify(eventData)
-
     });
-    debugger
+
+    if (response.status === 422) {
+        return response;
+    }
+    
     if (!response.ok) {
         throw json({message: 'Could not save event.'}, { status: 500 });
     }
